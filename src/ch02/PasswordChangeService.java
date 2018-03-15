@@ -11,7 +11,7 @@ public class PasswordChangeService {
 		User user = userRepository.findUserById(userId);
 		if(user == null)
 			throw new UserNotFoundException();
-		
 		user.changePassword(oldPw, newPw);
+		System.out.println("changePassword"+":"+newPw);
 	}
 }

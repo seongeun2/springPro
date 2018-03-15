@@ -12,7 +12,7 @@ public class AuthenticationService {
 			failLogger.insertBadPw(id, password);
 			throw new AuthException();
 		}else {
-			System.out.println("ok"+id+":"+password);
+			System.out.println("ok--->"+id+":"+password);
 		}
 		
 		return new AuthInfo(user.getId());
