@@ -1,0 +1,28 @@
+<beans xmlns="http://www.springframework.org/schema/beans" 
+xmlns:aop = "http://www.springframework.org/schema/aop"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+<!-- Advice 클래스를 빈으로 등록 -->
+<bean id="washHand" class="bap.WashHandAdvice" />
+<aop:config>
+	<aop:aspect id="washHandAspect" ref="washHand">
+		<aop:before method="washHand" pointcut="within(bap.*)"/>
+	<!-- <aop:pointcut expression="within(bap.*)" id="publicMethod"/>
+		<aop:before method="washHand" pointcut-ref="publicMethod"/> -->
+	</aop:aspect>
+</aop:config>
+
+<bean id="desert" class="bap.DesertAdvice" />
+<aop:config>
+	<aop:aspect id="desertAspect" ref="desert">
+		<aop:pointcut expression="within(bap.*)" id="publicMethod"/>
+		<aop:after method="desert" pointcut-ref="publicMethod"/>
+	</aop:aspect>
+</aop:config>
+
+<bean id="bap" class="bap.Bap" />
+</beans>

@@ -1,0 +1,33 @@
+<beans xmlns="http://www.springframework.org/schema/beans" 
+xmlns:aop = "http://www.springframework.org/schema/aop"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+<!-- Advice 클래스를 빈으로 등록 -->
+<bean id="profiler" class="ch06_3.Profiler" />
+<bean id="cache" class="ch06_3.ArticleCacheAdvice" />
+<aop:config>
+	<aop:aspect id="traceAspect" ref="profiler" order="2">
+		<aop:pointcut expression="within(ch06.board.*)" id="publicMethod"/>
+		<aop:around method="trace" pointcut-ref="publicMethod"/>
+	</aop:aspect>
+</aop:config>
+
+<aop:config>
+	<aop:aspect id="cacheAspect" ref="cache" order="1">
+		<aop:around method="cache" pointcut="execution(public * ch06.board.ReadArticleServiceImpl.*(..))"/>
+	</aop:aspect>
+</aop:config>
+
+<bean id="writeArticleService" class="ch06.board.WriteArticleServiceImpl">
+	<constructor-arg><ref bean="articleDao" /></constructor-arg>
+</bean>
+<bean id="articleDao" class="ch06.board.MemoryArticleDao" />
+<bean id="readArticleService" class="ch06.board.ReadArticleServiceImpl">
+	<property name="articleDao" ref="articleDao" />
+</bean>
+
+</beans>
